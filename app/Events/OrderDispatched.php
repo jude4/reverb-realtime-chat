@@ -11,17 +11,15 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
-use App\Models\Message;
 
-class Example implements ShouldBroadcastNow
+class OrderDispatched implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     /**
      * Create a new event instance.
      */
-    public function __construct(protected User $user, protected Message $message)
+    public function __construct(public User $user)
     {
         //
     }
@@ -34,21 +32,7 @@ class Example implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat'),
+            new PrivateChannel('users.' . $this->user->id),
         ];
-    }
-
-    public function broadcastWith(): array
-    {
-        return [
-           'user' => [
-            'id' => $this->user->id,
-            'name' => $this->user->name,
-            'email' => $this->user->email,
-           ],
-           'message' => [
-            'id' => $this->message->id,
-           ]
-           ];
     }
 }

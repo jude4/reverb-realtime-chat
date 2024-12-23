@@ -10,10 +10,15 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900"
                     x-init="
-                    Echo.channel('chat')
+                    /** Echo.private('users.{{ auth()->id() }}')
+                    .listen('OrderDispatched', (event) => {
+                        console.log(event);
+                    }) **/
+                         Echo.channel('chat')
                     .listen('Example', (event) => {
                         console.log(event);
-                    });
+                    })
+                        
                     "
                 >
                     {{ __("You're logged in!") }}
